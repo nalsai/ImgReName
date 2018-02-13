@@ -14,14 +14,14 @@
     <framework targetVersion="4.6.2" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="ImgReName.exe.manifest" size="5165">
+    <dependentAssembly dependencyType="install" codebase="ImgReName.exe.manifest" size="5159">
       <assemblyIdentity name="ImgReName.exe" version="1.0.0.0" publicKeyToken="0000000000000000" language="de" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>HuDtQ0yNDB5qAkTJO24yzt0y9WtjNRyLV62W8337/Fk=</dsig:DigestValue>
+        <dsig:DigestValue>5kp9dYUZq8vlycYLt3RniRqAW8pIOcbPZo/OKSrFTug=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -1,8 +1,8 @@
+N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\bin\Debug\ImgReName.exe.config
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\bin\Debug\ImgReName.exe.manifest
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\bin\Debug\ImgReName.application
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\bin\Debug\ImgReName.exe
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\bin\Debug\ImgReName.pdb
-N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\ImgReName.csprojResolveAssemblyReference.cache
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\MainWindow.g.cs
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\App.g.cs
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\ImgReName_MarkupCompile.cache
@@ -17,4 +17,3 @@ N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\ImgR
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\ImgReName.application
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\ImgReName.exe
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\ImgReName.pdb
-N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\bin\Debug\ImgReName.exe.config

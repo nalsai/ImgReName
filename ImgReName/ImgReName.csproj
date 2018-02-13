@@ -78,7 +78,7 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Exotiska djur.ico</ApplicationIcon>
+    <ApplicationIcon>ImgReNameI.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -151,13 +151,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="6full.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="2 empty.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Exotiska djur.ico" />
+    <Resource Include="ImgReNameI.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
