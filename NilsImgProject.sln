@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImgReName", "ImgReName\ImgReName.csproj", "{E5FDDBE5-B751-43F8-B693-F01A71E857BA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5FDDBE5-B751-43F8-B693-F01A71E857BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5FDDBE5-B751-43F8-B693-F01A71E857BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5FDDBE5-B751-43F8-B693-F01A71E857BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5FDDBE5-B751-43F8-B693-F01A71E857BA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7A1529C5-EF8F-4D57-9B6D-826A977919C3}
+	EndGlobalSection
+EndGlobal
