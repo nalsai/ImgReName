@@ -31,12 +31,12 @@ namespace ImgReName
             int Errors = 0;
 
             object NamingMethod = MethodSelect.SelectedItem;
-            
+
             // Create OpenFileDialog
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
             {
                 Multiselect = true,
-                Filter =    "Bilder|*.jpg; *.png; *.tiff; *.tif; *.bmp|" +
+                Filter = "Bilder|*.jpg; *.png; *.tiff; *.tif; *.bmp|" +
                             "Alle Dateien|*.*"
             };
 
@@ -120,17 +120,24 @@ namespace ImgReName
                         DoEvents();
                         File.Move(path, newpath);
                     }
-                    catch(Exception exc)
+                    catch (Exception exc)
                     {
-                        Run run = new Run(Environment.NewLine + "Fehler: " + exc + Environment.NewLine)
-                        {
-                            Foreground = Brushes.Red
-                        };
-                        debugLog.Inlines.Add(run);
-                        ScrollViewer.ScrollToBottom();
-                        DoEvents();
-                        Errors++;
-                        continue;
+                        //if (exc == System.IO.IOException)
+                        //{
+                        ///
+                        //}
+                        //else
+                        //{
+                            Run run = new Run(Environment.NewLine + "Fehler: " + exc + Environment.NewLine)
+                            {
+                                Foreground = Brushes.Red
+                            };
+                            debugLog.Inlines.Add(run);
+                            ScrollViewer.ScrollToBottom();
+                            DoEvents();
+                            Errors++;
+                            continue;
+                        //}
                     }
                 }
 

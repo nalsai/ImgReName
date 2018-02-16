@@ -17,3 +17,4 @@ N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\ImgR
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\ImgReName.application
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\ImgReName.exe
 N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\ImgReName.pdb
+N:\Dokumente\Visual Studio 2017\Projects\NilsImgProject\ImgReName\obj\Debug\ImgReName.csprojResolveAssemblyReference.cache
