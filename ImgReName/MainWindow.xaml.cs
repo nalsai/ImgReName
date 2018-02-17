@@ -9,11 +9,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 /**
- * Sucht nach dem Aufnahmezeitpunktm der ausgewählten Bilder, 
+ * Sucht nach dem Aufnahmezeitpunkt der ausgewählten Bilder, 
  * verschiebt sie in einen Ordner, der nach dem Datum benannt ist 
  * und benennt sie entsprechend ihrem Aufnhamezeitpunkt.
  * @author Nils Fürniß
- * @version 1.0
+ * @version 1.0.0.1
  */
 
 namespace ImgReName
@@ -85,35 +85,40 @@ namespace ImgReName
                             directory = System.IO.Path.GetDirectoryName(path);
                             name = System.IO.Path.GetFileNameWithoutExtension(path);
                             extension = System.IO.Path.GetExtension(path);
+                        }
+                        ChooseName:
+                        int Year = (int)realDate.Year;
+                        int Month = (int)realDate.Month;
+                        int Day = (int)realDate.Day;
+                        int Hour = (int)realDate.Hour;
+                        int Minute = (int)realDate.Minute;
+                        int Second = (int)realDate.Second;
 
-                            int Year = (int)realDate.Year;
-                            int Month = (int)realDate.Month;
-                            int Day = (int)realDate.Day;
-                            int Hour = (int)realDate.Hour;
-                            int Minute = (int)realDate.Minute;
-                            int Second = (int)realDate.Second;
+                        newname = "IMG";
+                        if (NamingMethod == ImgRenameMichael)
+                        {
+                            newname = Number2String(Year - 1999, true) + Number2String(Month, true);
+                            if (Day <= 9)
+                                newname = newname + Day;
+                            else
+                                newname = newname + Number2String(Day - 9, true);
 
-
-                            newname = "IMG";
-                            if (NamingMethod == ImgRenameMichael)
-                            {
-                                newname = Number2String(Year - 1999, true) + Number2String(Month, true);
-                                if (Day <= 9)
-                                    newname = newname + Day;
-                                else
-                                    newname = newname + Number2String(Day - 9, true);
-
-                                newname = newname + (Hour * 3600 + Minute * 60 + Second);
-                            }
-                            else if (NamingMethod == img_date_time)
-                            {
-                                newname = "IMG_" + realDate.ToString("yyyyMMdd") + "_" + realDate.ToString("HHmmss");
-                            }
-                            debugLog.Inlines.Add(Environment.NewLine + "Neuer Name: " + newname);
-                            newpath = System.IO.Path.Combine(directory, realDate.ToString("yyyy-MM-dd"), newname + extension);
-                            newdirectory = System.IO.Path.Combine(directory, realDate.ToString("yyyy-MM-dd"));
-                            debugLog.Inlines.Add(Environment.NewLine + "Erstelle Ordner " + realDate.ToString("yyyy-MM-dd"));
-                            Directory.CreateDirectory(newdirectory);
+                            newname = newname + (Hour * 3600 + Minute * 60 + Second);
+                        }
+                        else if (NamingMethod == img_date_time)
+                        {
+                            newname = "IMG_" + realDate.ToString("yyyyMMdd") + "_" + realDate.ToString("HHmmss");
+                        }
+                        debugLog.Inlines.Add(Environment.NewLine + "Neuer Name: " + newname);
+                        newpath = System.IO.Path.Combine(directory, realDate.ToString("yyyy-MM-dd"), newname + extension);
+                        newdirectory = System.IO.Path.Combine(directory, realDate.ToString("yyyy-MM-dd"));
+                        debugLog.Inlines.Add(Environment.NewLine + "Erstelle Ordner " + realDate.ToString("yyyy-MM-dd"));
+                        Directory.CreateDirectory(newdirectory);
+                        if (File.Exists(newpath))
+                        {
+                            debugLog.Inlines.Add(Environment.NewLine + "Es gibt schon eine Datei mit dem neuen Namen im Zielordner.");
+                            realDate.AddSeconds(1);
+                            goto ChooseName;
                         }
                         debugLog.Inlines.Add(Environment.NewLine + "Verschiebe nach \"" + newpath + "\"" + Environment.NewLine);
                         ScrollViewer.ScrollToBottom();
@@ -122,22 +127,15 @@ namespace ImgReName
                     }
                     catch (Exception exc)
                     {
-                        //if (exc == System.IO.IOException)
-                        //{
-                        ///
-                        //}
-                        //else
-                        //{
-                            Run run = new Run(Environment.NewLine + "Fehler: " + exc + Environment.NewLine)
-                            {
-                                Foreground = Brushes.Red
-                            };
-                            debugLog.Inlines.Add(run);
-                            ScrollViewer.ScrollToBottom();
-                            DoEvents();
-                            Errors++;
-                            continue;
-                        //}
+                        Run run = new Run(Environment.NewLine + "Fehler: " + exc + Environment.NewLine)
+                        {
+                            Foreground = Brushes.Red
+                        };
+                        debugLog.Inlines.Add(run);
+                        ScrollViewer.ScrollToBottom();
+                        DoEvents();
+                        Errors++;
+                        continue;
                     }
                 }
 
