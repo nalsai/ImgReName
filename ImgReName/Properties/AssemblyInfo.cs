@@ -8,7 +8,7 @@ using System.Windows;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
 [assembly: AssemblyTitle("ImgReName")]
-[assembly: AssemblyDescription("Sucht nach dem Aufnahmezeitpunktm der ausgewählten Bilder, verschiebt sie in einen Ordner, der nach dem Datum benannt ist und benennt sie entsprechend ihrem Aufnhamezeitpunkt.")]
+[assembly: AssemblyDescription("Sucht nach dem Aufnahmezeitpunkt der ausgewählten Bilder, verschiebt sie in einen Ordner, der nach dem Datum benannt ist und benennt sie entsprechend ihrem Aufnhamezeitpunkt.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Nalsai")]
 [assembly: AssemblyProduct("ImgReName")]
@@ -51,7 +51,7 @@ using System.Windows;
 // Sie können alle Werte angeben oder Standardwerte für die Build- und Revisionsnummern verwenden,
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
 [assembly: NeutralResourcesLanguage("de")]
 

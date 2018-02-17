@@ -28,9 +28,10 @@
     <TargetCulture>de</TargetCulture>
     <ProductName>ImgReName</ProductName>
     <PublisherName>Nalsai</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.1</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.1.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -79,7 +80,7 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>ImgReNameI.ico</ApplicationIcon>
+    <ApplicationIcon>ImgReName.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -160,6 +161,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ImgReNameI.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImgReName.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
