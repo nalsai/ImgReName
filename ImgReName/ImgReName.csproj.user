@@ -2,7 +2,7 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <PublishUrlHistory>G:\ImgReName\Release\|ftp://anminisa.de/nils/ImgReName/|http://anminisa.de/nils/ImgReName/|anminisa.de/nils/ImgReName/|anminisa.de/nils/</PublishUrlHistory>
-    <InstallUrlHistory>https://github.com/Nalsai/ImgReName/tree/master/Release/|https://nalsai.github.io/ImgReName/Release/|http://anminisa.de/nils/ImgReName/</InstallUrlHistory>
+    <InstallUrlHistory>https://nalsai.github.io/ImgReName/Release/|https://github.com/Nalsai/ImgReName/tree/master/Release/|http://anminisa.de/nils/ImgReName/</InstallUrlHistory>
     <SupportUrlHistory />
     <UpdateUrlHistory />
     <BootstrapperUrlHistory />
