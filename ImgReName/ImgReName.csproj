@@ -14,7 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>G:\ImgReName\Release\</PublishUrl>
+    <PublishUrl>ftp://anminisa.de/nils/ImgReName/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -24,7 +24,7 @@
     <UpdatePeriodically>true</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://nalsai.github.io/ImgReName/Release/</InstallUrl>
+    <InstallUrl>http://anminisa.de/nils/ImgReName/</InstallUrl>
     <TargetCulture>de</TargetCulture>
     <ProductName>ImgReName</ProductName>
     <PublisherName>Nalsai</PublisherName>
