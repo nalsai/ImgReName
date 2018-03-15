@@ -8,14 +8,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-/**
- * Sucht nach dem Aufnahmezeitpunkt der ausgewählten Bilder, 
- * verschiebt sie in einen Ordner, der nach dem Datum benannt ist 
- * und benennt sie entsprechend ihrem Aufnhamezeitpunkt.
- * @author Nils Fürniß
- * @version 1.0.0.1
- */
-
 namespace ImgReName
 {
     public partial class MainWindow : Window
