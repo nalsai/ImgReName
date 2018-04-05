@@ -3,7 +3,7 @@
   <PropertyGroup>
     <PublishUrlHistory>ftp://anminisa.de/nils/ImgReName/|http://anminisa.de/nils/ImgReName/|G:\ImgReName\Release\|anminisa.de/nils/ImgReName/|anminisa.de/nils/</PublishUrlHistory>
     <InstallUrlHistory>http://anminisa.de/nils/ImgReName/|https://nalsai.github.io/ImgReName/Release/|https://github.com/Nalsai/ImgReName/tree/master/Release/</InstallUrlHistory>
-    <SupportUrlHistory />
+    <SupportUrlHistory>https://nalsai.github.io/ImgReName</SupportUrlHistory>
     <UpdateUrlHistory />
     <BootstrapperUrlHistory />
     <ErrorReportUrlHistory />
