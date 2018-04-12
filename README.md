@@ -1,5 +1,8 @@
 # ImgReName
-This is a Visual Studio C# WPF project made by myself for a program, which renames the selected pictures according to their recording date and moves them into subfolders for each day.
+Ein Open Source C# Programm um fotografierte Bilder zu organisieren.
+
+Webseite:
+https://nalsai.github.io/ImgReName
 
 Releases: 
-[https://github.com/Nalsai/NilsImgProject/releases](https://github.com/Nalsai/NilsImgProject/releases)
+https://github.com/Nalsai/ImgReName/releases
