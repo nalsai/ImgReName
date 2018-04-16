@@ -6,14 +6,14 @@
         mc:Ignorable="d"
         Title="ImgReName" Height="400" Width="600" Background="#FF2D2D30" Foreground="White" MinWidth="550" MinHeight="350" FontSize="14" VerticalAlignment="Top">
     <Grid>
-        <Label Content="Benennungsmethode:" Margin="10,10,0,0" VerticalAlignment="Top" Height="30" Foreground="White" MinWidth="125"/>
-        <ComboBox x:Name="MethodSelect" Text="Methode zu Benennung" VerticalAlignment="Top" Margin="160,10,140,0" Height="30" SelectionChanged="ComboBox_SelectionChanged_1" FontSize="14" MinWidth="220">
+        <Label Content="Benennungsmethode:" Margin="5,10,0,0" VerticalAlignment="Top" Height="30" Foreground="White" MinWidth="125"/>
+        <ComboBox x:Name="MethodSelect" Text="Methode zu Benennung" VerticalAlignment="Top" Margin="140,10,165,0" Height="30" SelectionChanged="ComboBox_SelectionChanged_1" FontSize="14" MinWidth="220">
             <ComboBoxItem x:Name="ImgRenameMichael" Content="Original ImgRename von Michael" IsSelected="True"/>
             <ComboBoxItem x:Name="img_date_time" Content="IMG_Datum_Uhrzeit"/>
         </ComboBox>
-        <Button Content="Bilder auswählen" Margin="0,10,10,0" Height="30" Click="Button_Click" VerticalAlignment="Top" Foreground="White" Background="#FF1E1E1E" MinWidth="120" HorizontalAlignment="Right"/>
+        <Button Content="Datei(en) auswählen" Margin="0,10,10,0" Height="30" Click="Button_Click" VerticalAlignment="Top" Foreground="White" Background="#FF1E1E1E" MinWidth="150" HorizontalAlignment="Right"/>
         <ScrollViewer x:Name="ScrollViewer" HorizontalScrollBarVisibility="Auto" Margin="10,50,10,10" IsHitTestVisible="True" Foreground="White" Background="#FF1E1E1E">
-            <TextBlock x:Name="debugLog" Drop="DropThings" AllowDrop="True" Foreground="White" FontSize="12"><LineBreak/><Run Text="Bilder auswählen oder auf das Fenster ziehen und ablegen."/><LineBreak/><LineBreak/><Run Text="ImgReName verschiebt sie dann automatisch in Ordner, die nach dem Aufnhamedatum benannt sind"/><LineBreak/><Run Text="und bennent die Bilder nach ihrem Aufnahmezeitpunkt."/><LineBreak/><Run Text="Weitere Informationen auf meiner Webseite: "/><Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://nalsai.github.io/ImgReName"><Run Text="https://nalsai.github.io/ImgReName"/></Hyperlink><LineBreak/></TextBlock>
+            <TextBlock x:Name="debugLog" Drop="DropThings" AllowDrop="True" Foreground="White" FontSize="12" Background="#FF1E1E1E"><LineBreak/><Run Text="Bilder/Videos auswählen oder auf das Fenster ziehen und ablegen."/><LineBreak/><LineBreak/><Run Text="ImgReName verschiebt sie dann automatisch in Ordner, die nach dem Aufnhamedatum benannt sind"/><LineBreak/><Run Text="und bennent sie nach ihrem Aufnahmezeitpunkt."/><LineBreak/><Run Text="Weitere Informationen auf meiner Webseite: "/><Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://nalsai.github.io/ImgReName"><Run Text="https://nalsai.github.io/ImgReName"/></Hyperlink><LineBreak/></TextBlock>
         </ScrollViewer>
         <ToolBarPanel HorizontalAlignment="Left" Height="100" Margin="49,3,0,0" VerticalAlignment="Top" Width="100"/>
         <DockPanel Height="30" LastChildFill="False" Margin="10,10,10,0" VerticalAlignment="Top"/>

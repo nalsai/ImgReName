@@ -41,8 +41,8 @@ namespace ImgReName
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
             {
                 Multiselect = true,
-                Filter = "Bilder|*.jpg; *.png; *.tiff; *.tif; *.bmp|" +
-                            "Alle Dateien|*.*"
+                Filter = "Bilder/Videos|*.jpg; *.png; *.tiff; *.tif; *.bmp; *.mp4; *.mov|" +
+                         "Alle Dateien|*.*"
             };
 
             // Display OpenFileDialog by calling ShowDialog method
@@ -60,7 +60,9 @@ namespace ImgReName
             object NamingMethod = MethodSelect.SelectedItem;
             foreach (string path in PathList)
             {
-                DateTime realDate;
+                DateTime realDate = new DateTime(2000, 1, 1, 1, 1, 1);
+                DateTime fileCreatedDate;
+                DateTime fileChangedDate;
                 string date;
                 string newpath;
                 string directory;
@@ -80,30 +82,52 @@ namespace ImgReName
                     using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
                     {
 
-                        // Get Date
-                        debugLog.Inlines.Add(Environment.NewLine + "Suche Aufnahmedatum von \"" + path + "\"");
-                        BitmapSource img = BitmapFrame.Create(fs);
-                        BitmapMetadata md = (BitmapMetadata)img.Metadata;
-                        date = md.DateTaken;
-                        if (String.IsNullOrEmpty(date))
-                        {
-                            Run run = new Run(Environment.NewLine + "Kein Aufnahmedatum gefunden." + Environment.NewLine)
-                            {
-                                Foreground = Brushes.Red
-                            };
-                            debugLog.Inlines.Add(run);
-                            ScrollViewer.ScrollToBottom();
-                            DoEvents();
-                            Errors++;
-                            continue;
-                        }
-                        debugLog.Inlines.Add(Environment.NewLine + "Aufnahmedatum: " + date);
-                        realDate = DateTime.Parse(date);
-
                         // Get Directory, Name and Extension of File
                         directory = Path.GetDirectoryName(path);
                         name = Path.GetFileNameWithoutExtension(path);
                         extension = Path.GetExtension(path);
+
+                        // Get Date
+
+                        if (extension == ".mp4" || extension == ".mov")
+                        {
+                            debugLog.Inlines.Add(Environment.NewLine + "Video erkannt.");
+                            fileCreatedDate = File.GetCreationTime(path);
+                            debugLog.Inlines.Add(Environment.NewLine + "Dateierstellungsdatum: " + fileCreatedDate);
+                            fileChangedDate = File.GetLastWriteTime(path);
+                            debugLog.Inlines.Add(Environment.NewLine + "Dateiänderungsdatum: " + fileChangedDate);
+                            if (fileChangedDate < fileCreatedDate)
+                            {
+                                realDate = fileChangedDate;
+                                debugLog.Inlines.Add(Environment.NewLine + "Nutze Dateiänderungsdatum.");
+                            }
+                            else
+                            {
+                                realDate = fileCreatedDate;
+                                debugLog.Inlines.Add(Environment.NewLine + "Nutze Dateierstellungsdatum.");
+                            }
+                        }
+                        else
+                        {
+                            debugLog.Inlines.Add(Environment.NewLine + "Suche Aufnahmedatum von \"" + path + "\"");
+                            BitmapSource img = BitmapFrame.Create(fs);
+                            BitmapMetadata md = (BitmapMetadata)img.Metadata;
+                            date = md.DateTaken;
+                            if (String.IsNullOrEmpty(date))
+                            {
+                                Run run = new Run(Environment.NewLine + "Kein Aufnahmedatum gefunden." + Environment.NewLine)
+                                {
+                                    Foreground = Brushes.Red
+                                };
+                                debugLog.Inlines.Add(run);
+                                ScrollViewer.ScrollToBottom();
+                                DoEvents();
+                                Errors++;
+                                continue;
+                            }
+                            debugLog.Inlines.Add(Environment.NewLine + "Aufnahmedatum: " + date);
+                            realDate = DateTime.Parse(date);
+                        }
                     }
 
                     ChooseName:
@@ -124,10 +148,17 @@ namespace ImgReName
                             newname = newname + Number2String(Day - 9, true);
 
                         newname = newname + (Hour * 3600 + Minute * 60 + Second);
+
+                        if (extension == ".mp4" || extension == ".mov")
+                            newname = "VID_" + newname;
                     }
                     else if (NamingMethod == img_date_time)
                     {
-                        newname = "IMG_" + realDate.ToString("yyyyMMdd") + "_" + realDate.ToString("HHmmss");
+
+                        if (extension == ".mp4" || extension == ".mov")
+                            newname = "VID_" + realDate.ToString("yyyyMMdd") + "_" + realDate.ToString("HHmmss");
+                        else
+                            newname = "IMG_" + realDate.ToString("yyyyMMdd") + "_" + realDate.ToString("HHmmss");
                     }
                     debugLog.Inlines.Add(Environment.NewLine + "Neuer Name: " + newname);
                     newpath = Path.Combine(directory, realDate.ToString("yyyy-MM-dd"), newname + extension);
