@@ -56,6 +56,7 @@ namespace ImgReName
 
         public void ReName(string[] PathList)
         {
+            BrowseBtn.IsEnabled = false;
             int Errors = 0;
             object NamingMethod = MethodSelect.SelectedItem;
             foreach (string path in PathList)
@@ -113,7 +114,7 @@ namespace ImgReName
                             BitmapSource img = BitmapFrame.Create(fs);
                             BitmapMetadata md = (BitmapMetadata)img.Metadata;
                             date = md.DateTaken;
-                            if (String.IsNullOrEmpty(date))
+                            if (string.IsNullOrEmpty(date))
                             {
                                 Run run = new Run(Environment.NewLine + "Kein Aufnahmedatum gefunden." + Environment.NewLine)
                                 {
@@ -200,6 +201,7 @@ namespace ImgReName
             }
             else
                 debugLog.Inlines.Add(Environment.NewLine + "Abgeschlossen ohne Fehler." + Environment.NewLine);
+            BrowseBtn.IsEnabled = true;
         }
 
         public void DoEvents()
@@ -218,9 +220,9 @@ namespace ImgReName
             Dispatcher.PushFrame(frame);
         }
 
-        private String Number2String(int number, bool isCaps)
+        private string Number2String(int number, bool isCaps)
         {
-            Char c = (Char)((isCaps ? 65 : 97) + (number - 1));
+            char c = (char)((isCaps ? 65 : 97) + (number - 1));
             return c.ToString();
         }
 
