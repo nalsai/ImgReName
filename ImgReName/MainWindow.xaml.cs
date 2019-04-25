@@ -1,22 +1,40 @@
-﻿using System;
+﻿using Squirrel;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Threading;
 
 namespace ImgReName
 {
     public partial class MainWindow : Window
     {
+
+        static async void Updater()
+        {
+            using (var mgr = new UpdateManager(@"https://nalsai.de/imgrename/download"))
+            {
+                try
+                {
+                    await mgr.UpdateApp();
+                }
+                catch
+                {
+                    // (╯°□°）╯︵ ┻━┻
+                }
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+            Updater();
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -27,7 +45,6 @@ namespace ImgReName
 
         private void DropThings(object sender, DragEventArgs e)
         {
-
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -41,7 +58,7 @@ namespace ImgReName
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
             {
                 Multiselect = true,
-                Filter = "Bilder/Videos|*.jpg; *.png; *.tiff; *.tif; *.bmp; *.mp4; *.mov|" +
+                Filter = "Bilder/Videos|*.jpg; *.png; *.tiff; *.tif; *.bmp; *.mp4; *.mov; *.avi|" +
                          "Alle Dateien|*.*"
             };
 
@@ -54,13 +71,19 @@ namespace ImgReName
             }
         }
 
-        public void ReName(string[] PathList)
+        void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            BrowseBtn.IsEnabled = false;
+
+
+            List<object> args = e.Argument as List<object>;
+
+
             int Errors = 0;
-            object NamingMethod = MethodSelect.SelectedItem;
-            foreach (string path in PathList)
+            object NamingMethod = args[0];
+            int i = 0;
+            foreach (string path in (string[])args[1])
             {
+                i++;
                 DateTime realDate = new DateTime(2000, 1, 1, 1, 1, 1);
                 DateTime fileCreatedDate;
                 DateTime fileChangedDate;
@@ -89,49 +112,43 @@ namespace ImgReName
                         extension = Path.GetExtension(path);
 
                         // Get Date
-
-                        if (extension == ".mp4" || extension == ".mov")
+                        (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Suche Aufnahmedatum von \"" + path + "\"");
+                        if (extension == ".mp4" || extension == ".mov" || extension == ".avi")
                         {
-                            debugLog.Inlines.Add(Environment.NewLine + "Video erkannt.");
+                            (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Video erkannt.");
                             fileCreatedDate = File.GetCreationTime(path);
-                            debugLog.Inlines.Add(Environment.NewLine + "Dateierstellungsdatum: " + fileCreatedDate);
+                            (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Dateierstellungsdatum: " + fileCreatedDate);
                             fileChangedDate = File.GetLastWriteTime(path);
-                            debugLog.Inlines.Add(Environment.NewLine + "Dateiänderungsdatum: " + fileChangedDate);
+                            (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Dateiänderungsdatum: " + fileChangedDate);
                             if (fileChangedDate < fileCreatedDate)
                             {
                                 realDate = fileChangedDate;
-                                debugLog.Inlines.Add(Environment.NewLine + "Nutze Dateiänderungsdatum.");
+                                (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + "Nutze Dateiänderungsdatum.");
                             }
                             else
                             {
                                 realDate = fileCreatedDate;
-                                debugLog.Inlines.Add(Environment.NewLine + "Nutze Dateierstellungsdatum.");
+                                (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Nutze Dateierstellungsdatum.");
                             }
                         }
                         else
                         {
-                            debugLog.Inlines.Add(Environment.NewLine + "Suche Aufnahmedatum von \"" + path + "\"");
                             BitmapSource img = BitmapFrame.Create(fs);
                             BitmapMetadata md = (BitmapMetadata)img.Metadata;
                             date = md.DateTaken;
                             if (string.IsNullOrEmpty(date))
                             {
-                                Run run = new Run(Environment.NewLine + "Kein Aufnahmedatum gefunden." + Environment.NewLine)
-                                {
-                                    Foreground = Brushes.Red
-                                };
-                                debugLog.Inlines.Add(run);
-                                ScrollViewer.ScrollToBottom();
-                                DoEvents();
+                                (sender as BackgroundWorker).ReportProgress(i, "エ" + Environment.NewLine + " Kein Aufnahmedatum gefunden." + Environment.NewLine);
                                 Errors++;
                                 continue;
                             }
-                            debugLog.Inlines.Add(Environment.NewLine + "Aufnahmedatum: " + date);
+
+                            (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Aufnahmedatum: " + date);
                             realDate = DateTime.Parse(date);
                         }
                     }
 
-                    ChooseName:
+                ChooseName:
                     Year = realDate.Year;
                     Month = realDate.Month;
                     Day = realDate.Day;
@@ -144,11 +161,11 @@ namespace ImgReName
                     {
                         newname = Number2String(Year - 1999, true) + Number2String(Month, true);
                         if (Day <= 9)
-                            newname = newname + Day;
+                            newname += Day;
                         else
-                            newname = newname + Number2String(Day - 9, true);
+                            newname += Number2String(Day - 9, true);
 
-                        newname = newname + (Hour * 3600 + Minute * 60 + Second);
+                        newname += (Hour * 3600 + Minute * 60 + Second);
 
                         if (extension == ".mp4" || extension == ".mov")
                             newname = "VID_" + newname;
@@ -161,74 +178,100 @@ namespace ImgReName
                         else
                             newname = "IMG_" + realDate.ToString("yyyyMMdd") + "_" + realDate.ToString("HHmmss");
                     }
-                    debugLog.Inlines.Add(Environment.NewLine + "Neuer Name: " + newname);
+                    (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Neuer Name: " + newname);
                     newpath = Path.Combine(directory, realDate.ToString("yyyy-MM-dd"), newname + extension);
                     newdirectory = Path.Combine(directory, realDate.ToString("yyyy-MM-dd"));
-                    debugLog.Inlines.Add(Environment.NewLine + "Erstelle Ordner " + realDate.ToString("yyyy-MM-dd"));
                     Directory.CreateDirectory(newdirectory);
                     if (File.Exists(newpath))
                     {
-                        debugLog.Inlines.Add(Environment.NewLine + "Es gibt schon eine Datei mit dem neuen Namen im Zielordner.");
+                        (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Es gibt schon eine Datei mit dem neuen Namen im Zielordner.");
                         realDate = realDate.AddSeconds(1);
                         goto ChooseName;
                     }
-                    debugLog.Inlines.Add(Environment.NewLine + "Verschiebe nach \"" + newpath + "\"" + Environment.NewLine);
-                    ScrollViewer.ScrollToBottom();
-                    DoEvents();
                     File.Move(path, newpath);
+                    (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine);
                 }
                 catch (Exception exc)
                 {
-                    Run run = new Run(Environment.NewLine + "Fehler: " + exc + Environment.NewLine)
-                    {
-                        Foreground = Brushes.Red
-                    };
-                    debugLog.Inlines.Add(run);
-                    ScrollViewer.ScrollToBottom();
-                    DoEvents();
+                    (sender as BackgroundWorker).ReportProgress(i, "エ" + Environment.NewLine + " Fehler: " + exc + Environment.NewLine);
                     Errors++;
                     continue;
                 }
             }
 
-            if (Errors > 0)
+            if (Errors == 1)
             {
-                Run run = new Run(Environment.NewLine + "Abgeschlossen mit " + Errors + " Fehlern." + Environment.NewLine)
-                {
-                    Foreground = Brushes.Red
-                };
-                debugLog.Inlines.Add(run);
+                (sender as BackgroundWorker).ReportProgress(i, "エ" + Environment.NewLine + " Abgeschlossen mit einem Fehler." + Environment.NewLine);
+            }
+            else if (Errors > 1)
+            {
+                (sender as BackgroundWorker).ReportProgress(i, "エ" + Environment.NewLine + " Abgeschlossen mit " + Errors + " Fehlern." + Environment.NewLine);
             }
             else
-                debugLog.Inlines.Add(Environment.NewLine + "Abgeschlossen ohne Fehler." + Environment.NewLine);
-            BrowseBtn.IsEnabled = true;
+                (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Abgeschlossen ohne Fehler." + Environment.NewLine);
+
+            e.Result = true;
         }
 
-        public void DoEvents()
+        void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            DispatcherFrame frame = new DispatcherFrame(true);
-            Dispatcher.CurrentDispatcher.BeginInvoke
-            (
-            DispatcherPriority.Background,
-            (SendOrPostCallback)delegate (object arg)
+            ProgrBar.Value = e.ProgressPercentage;
+            if (e.UserState != null)
             {
-                var f = arg as DispatcherFrame;
-                f.Continue = false;
-            },
-            frame
-            );
-            Dispatcher.PushFrame(frame);
+                string msg = (string)e.UserState;
+                if (msg.Contains("エ"))
+                {
+                    Run run = new Run(msg.TrimStart('エ')) { Foreground = Brushes.Red };
+                    debugLog.Inlines.Add(run);
+                }
+                else
+                    debugLog.Inlines.Add((string)e.UserState);
+            }
+            ScrollViewer.ScrollToBottom();
+        }
+
+        void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                if ((bool)e.Result)
+                    BrowseBtn.IsEnabled = true;
+                else
+                    debugLog.Inlines.Add("(╯°□°）╯︵ ┻━┻");
+            }
+            catch
+            { debugLog.Inlines.Add("(╯°□°）╯︵ ┻━┻"); }
+        }
+
+        public void ReName(string[] PathList)
+        {
+
+            using (BackgroundWorker worker = new BackgroundWorker())
+            {
+                worker.WorkerReportsProgress = true;
+                worker.DoWork += Worker_DoWork;
+                worker.ProgressChanged += Worker_ProgressChanged;
+                worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+
+                debugLog.Inlines.Clear();
+                ProgrBar.Minimum = 0;
+                ProgrBar.Maximum = PathList.Length;
+                BrowseBtn.IsEnabled = false;
+
+                List<object> arguments = new List<object>
+                {
+                    MethodSelect.SelectedItem,
+                    PathList
+                };
+
+                worker.RunWorkerAsync(arguments);
+            }
         }
 
         private string Number2String(int number, bool isCaps)
         {
             char c = (char)((isCaps ? 65 : 97) + (number - 1));
             return c.ToString();
-        }
-
-        private void ComboBox_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
-            Console.WriteLine(MethodSelect.SelectedItem);
         }
     }
 }
