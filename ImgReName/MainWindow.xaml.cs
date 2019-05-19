@@ -73,10 +73,7 @@ namespace ImgReName
 
         void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
-
-
             List<object> args = e.Argument as List<object>;
-
 
             int Errors = 0;
             object NamingMethod = args[0];
@@ -105,31 +102,20 @@ namespace ImgReName
                 {
                     using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
                     {
-
                         // Get Directory, Name and Extension of File
                         directory = Path.GetDirectoryName(path);
                         name = Path.GetFileNameWithoutExtension(path);
                         extension = Path.GetExtension(path);
 
                         // Get Date
-                        (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Suche Aufnahmedatum von \"" + path + "\"");
                         if (extension == ".mp4" || extension == ".mov" || extension == ".avi")
                         {
-                            (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Video erkannt.");
                             fileCreatedDate = File.GetCreationTime(path);
-                            (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Dateierstellungsdatum: " + fileCreatedDate);
                             fileChangedDate = File.GetLastWriteTime(path);
-                            (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Dateiänderungsdatum: " + fileChangedDate);
                             if (fileChangedDate < fileCreatedDate)
-                            {
                                 realDate = fileChangedDate;
-                                (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + "Nutze Dateiänderungsdatum.");
-                            }
                             else
-                            {
                                 realDate = fileCreatedDate;
-                                (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Nutze Dateierstellungsdatum.");
-                            }
                         }
                         else
                         {
@@ -138,12 +124,10 @@ namespace ImgReName
                             date = md.DateTaken;
                             if (string.IsNullOrEmpty(date))
                             {
-                                (sender as BackgroundWorker).ReportProgress(i, "エ" + Environment.NewLine + " Kein Aufnahmedatum gefunden." + Environment.NewLine);
+                                (sender as BackgroundWorker).ReportProgress(i, "エ" + "Kein Aufnahmedatum für " + Path.GetFileName(path) + " gefunden." + Environment.NewLine);
                                 Errors++;
                                 continue;
                             }
-
-                            (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Aufnahmedatum: " + date);
                             realDate = DateTime.Parse(date);
                         }
                     }
@@ -178,37 +162,36 @@ namespace ImgReName
                         else
                             newname = "IMG_" + realDate.ToString("yyyyMMdd") + "_" + realDate.ToString("HHmmss");
                     }
-                    (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Neuer Name: " + newname);
                     newpath = Path.Combine(directory, realDate.ToString("yyyy-MM-dd"), newname + extension);
                     newdirectory = Path.Combine(directory, realDate.ToString("yyyy-MM-dd"));
                     Directory.CreateDirectory(newdirectory);
                     if (File.Exists(newpath))
                     {
-                        (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Es gibt schon eine Datei mit dem neuen Namen im Zielordner.");
                         realDate = realDate.AddSeconds(1);
                         goto ChooseName;
                     }
                     File.Move(path, newpath);
-                    (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine);
+                    (sender as BackgroundWorker).ReportProgress(i, Path.GetFileName(path) + " wurde nach " + Path.Combine(realDate.ToString("yyyy-MM-dd"), newname + extension) + " verschoben." + Environment.NewLine);
                 }
                 catch (Exception exc)
                 {
-                    (sender as BackgroundWorker).ReportProgress(i, "エ" + Environment.NewLine + " Fehler: " + exc + Environment.NewLine);
+                    (sender as BackgroundWorker).ReportProgress(i, "エ" + "Fehler: " + exc + Environment.NewLine);
                     Errors++;
                     continue;
                 }
             }
 
+            (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine);
             if (Errors == 1)
             {
-                (sender as BackgroundWorker).ReportProgress(i, "エ" + Environment.NewLine + " Abgeschlossen mit einem Fehler." + Environment.NewLine);
+                (sender as BackgroundWorker).ReportProgress(i, "エ" + "Abgeschlossen mit einem Fehler." + Environment.NewLine);
             }
             else if (Errors > 1)
             {
-                (sender as BackgroundWorker).ReportProgress(i, "エ" + Environment.NewLine + " Abgeschlossen mit " + Errors + " Fehlern." + Environment.NewLine);
+                (sender as BackgroundWorker).ReportProgress(i, "エ" + "Abgeschlossen mit " + Errors + " Fehlern." + Environment.NewLine);
             }
             else
-                (sender as BackgroundWorker).ReportProgress(i, Environment.NewLine + " Abgeschlossen ohne Fehler." + Environment.NewLine);
+                (sender as BackgroundWorker).ReportProgress(i, "Abgeschlossen ohne Fehler." + Environment.NewLine);
 
             e.Result = true;
         }
@@ -221,11 +204,11 @@ namespace ImgReName
                 string msg = (string)e.UserState;
                 if (msg.Contains("エ"))
                 {
-                    Run run = new Run(msg.TrimStart('エ')) { Foreground = Brushes.Red };
+                    Run run = new Run(" " + msg.TrimStart('エ')) { Foreground = Brushes.Red };
                     debugLog.Inlines.Add(run);
                 }
                 else
-                    debugLog.Inlines.Add((string)e.UserState);
+                    debugLog.Inlines.Add(" " + msg);
             }
             ScrollViewer.ScrollToBottom();
         }
@@ -240,7 +223,9 @@ namespace ImgReName
                     debugLog.Inlines.Add("(╯°□°）╯︵ ┻━┻");
             }
             catch
-            { debugLog.Inlines.Add("(╯°□°）╯︵ ┻━┻"); }
+            { 
+                debugLog.Inlines.Add("(╯°□°）╯︵ ┻━┻"); 
+            }
         }
 
         public void ReName(string[] PathList)
