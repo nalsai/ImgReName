@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -81,97 +82,78 @@ namespace ImgReName
             foreach (string path in (string[])args[1])
             {
                 i++;
-                DateTime realDate = new DateTime(2000, 1, 1, 1, 1, 1);
-                DateTime fileCreatedDate;
-                DateTime fileChangedDate;
-                string date;
-                string newpath;
-                string directory;
-                string newdirectory;
-                string name;
-                string newname;
-                string extension;
-                int Year;
-                int Month;
-                int Day;
-                int Hour;
-                int Minute;
-                int Second;
-
                 try
                 {
-                    using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
-                    {
-                        // Get Directory, Name and Extension of File
-                        directory = Path.GetDirectoryName(path);
-                        name = Path.GetFileNameWithoutExtension(path);
-                        extension = Path.GetExtension(path);
+                    // Get Directory, Name and Extension of File
+                    string dir = Path.GetDirectoryName(path);
+                    string name = Path.GetFileNameWithoutExtension(path);
+                    string ext = Path.GetExtension(path);
 
-                        // Get Date
-                        if (extension == ".mp4" || extension == ".mov" || extension == ".avi")
-                        {
-                            fileCreatedDate = File.GetCreationTime(path);
-                            fileChangedDate = File.GetLastWriteTime(path);
-                            if (fileChangedDate < fileCreatedDate)
-                                realDate = fileChangedDate;
-                            else
-                                realDate = fileCreatedDate;
-                        }
+                    // Convert extension to lowercase
+                    if (ext.Any(char.IsUpper))
+                        ext = ext.ToLower();
+
+                    // Get Date
+                    DateTime dateTaken;
+                    if (ext == ".mp4" || ext == ".mov" || ext == ".avi")
+                    {
+                        DateTime fileCreatedDate = File.GetCreationTime(path);
+                        DateTime fileChangedDate = File.GetLastWriteTime(path);
+                        if (fileChangedDate < fileCreatedDate)
+                            dateTaken = fileChangedDate;
                         else
+                            dateTaken = fileCreatedDate;
+                    }
+                    else
+                    {
+                        using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
                         {
                             BitmapSource img = BitmapFrame.Create(fs);
                             BitmapMetadata md = (BitmapMetadata)img.Metadata;
-                            date = md.DateTaken;
+                            string date = md.DateTaken;
                             if (string.IsNullOrEmpty(date))
                             {
                                 (sender as BackgroundWorker).ReportProgress(i, "エ" + "Kein Aufnahmedatum für " + Path.GetFileName(path) + " gefunden." + Environment.NewLine);
                                 Errors++;
                                 continue;
                             }
-                            realDate = DateTime.Parse(date);
+                            dateTaken = DateTime.Parse(date);
                         }
                     }
 
                 ChooseName:
-                    Year = realDate.Year;
-                    Month = realDate.Month;
-                    Day = realDate.Day;
-                    Hour = realDate.Hour;
-                    Minute = realDate.Minute;
-                    Second = realDate.Second;
 
-                    newname = "IMG";
+                    string newname = "";
                     if (NamingMethod == ImgRenameMichael)
                     {
-                        newname = Number2String(Year - 1999, true) + Number2String(Month, true);
+                        newname = Number2String(dateTaken.Year - 1999, true) + Number2String(dateTaken.Month, true);
+                        int Day = dateTaken.Day;
                         if (Day <= 9)
                             newname += Day;
                         else
                             newname += Number2String(Day - 9, true);
 
-                        newname += (Hour * 3600 + Minute * 60 + Second);
+                        newname += (dateTaken.Hour * 3600 + dateTaken.Minute * 60 + dateTaken.Second);
 
-                        if (extension == ".mp4" || extension == ".mov")
+                        if (ext == ".mp4" || ext == ".mov" || ext == ".avi")
                             newname = "VID_" + newname;
                     }
                     else if (NamingMethod == img_date_time)
                     {
-
-                        if (extension == ".mp4" || extension == ".mov")
-                            newname = "VID_" + realDate.ToString("yyyyMMdd") + "_" + realDate.ToString("HHmmss");
+                        if (ext == ".mp4" || ext == ".mov" || ext == ".avi")
+                            newname = "VID_" + dateTaken.ToString("yyyyMMdd") + "_" + dateTaken.ToString("HHmmss");
                         else
-                            newname = "IMG_" + realDate.ToString("yyyyMMdd") + "_" + realDate.ToString("HHmmss");
+                            newname = "IMG_" + dateTaken.ToString("yyyyMMdd") + "_" + dateTaken.ToString("HHmmss");
                     }
-                    newpath = Path.Combine(directory, realDate.ToString("yyyy-MM-dd"), newname + extension);
-                    newdirectory = Path.Combine(directory, realDate.ToString("yyyy-MM-dd"));
-                    Directory.CreateDirectory(newdirectory);
+                    string newpath = Path.Combine(dir, dateTaken.ToString("yyyy-MM-dd"), newname + ext);
+                    Directory.CreateDirectory(Path.Combine(dir, dateTaken.ToString("yyyy-MM-dd")));
                     if (File.Exists(newpath))
                     {
-                        realDate = realDate.AddSeconds(1);
+                        dateTaken = dateTaken.AddSeconds(1);
                         goto ChooseName;
                     }
                     File.Move(path, newpath);
-                    (sender as BackgroundWorker).ReportProgress(i, Path.GetFileName(path) + " wurde nach " + Path.Combine(realDate.ToString("yyyy-MM-dd"), newname + extension) + " verschoben." + Environment.NewLine);
+                    (sender as BackgroundWorker).ReportProgress(i, Path.GetFileName(path) + " wurde nach " + Path.Combine(dateTaken.ToString("yyyy-MM-dd"), newname + ext) + " verschoben." + Environment.NewLine);
                 }
                 catch (Exception exc)
                 {
@@ -223,8 +205,8 @@ namespace ImgReName
                     debugLog.Inlines.Add("(╯°□°）╯︵ ┻━┻");
             }
             catch
-            { 
-                debugLog.Inlines.Add("(╯°□°）╯︵ ┻━┻"); 
+            {
+                debugLog.Inlines.Add("(╯°□°）╯︵ ┻━┻");
             }
         }
 
