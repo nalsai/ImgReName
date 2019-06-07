@@ -59,7 +59,7 @@ namespace ImgReName
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
             {
                 Multiselect = true,
-                Filter = "Bilder/Videos|*.jpg; *.png; *.tiff; *.tif; *.bmp; *.mp4; *.mov; *.avi|" +
+                Filter = "Bilder/Videos|*.jpg; *.png; *.tiff; *.tif; *.bmp; *.mp4; *.mov; *.avi; *.mts; *.m2ts|" +
                          "Alle Dateien|*.*"
             };
 
@@ -95,7 +95,7 @@ namespace ImgReName
 
                     // Get Date
                     DateTime dateTaken;
-                    if (ext == ".mp4" || ext == ".mov" || ext == ".avi")
+                    if (ext == ".mp4" || ext == ".mov" || ext == ".avi" || ext == ".mts" || ext == ".m2ts")
                     {
                         DateTime fileCreatedDate = File.GetCreationTime(path);
                         DateTime fileChangedDate = File.GetLastWriteTime(path);
@@ -124,9 +124,13 @@ namespace ImgReName
                 ChooseName:
 
                     string newname = "";
+
+                    if (ext == ".mp4" || ext == ".mov" || ext == ".avi" || ext == ".mts" || ext == ".m2ts")
+                        newname = "VID_";
+
                     if (NamingMethod == ImgRenameMichael)
                     {
-                        newname = Number2String(dateTaken.Year - 1999, true) + Number2String(dateTaken.Month, true);
+                        newname += Number2String(dateTaken.Year - 1999, true) + Number2String(dateTaken.Month, true);
                         int Day = dateTaken.Day;
                         if (Day <= 9)
                             newname += Day;
@@ -135,15 +139,12 @@ namespace ImgReName
 
                         newname += (dateTaken.Hour * 3600 + dateTaken.Minute * 60 + dateTaken.Second);
 
-                        if (ext == ".mp4" || ext == ".mov" || ext == ".avi")
-                            newname = "VID_" + newname;
                     }
                     else if (NamingMethod == img_date_time)
                     {
-                        if (ext == ".mp4" || ext == ".mov" || ext == ".avi")
-                            newname = "VID_" + dateTaken.ToString("yyyyMMdd") + "_" + dateTaken.ToString("HHmmss");
-                        else
-                            newname = "IMG_" + dateTaken.ToString("yyyyMMdd") + "_" + dateTaken.ToString("HHmmss");
+                        if (ext != ".mp4" && ext != ".mov" && ext != ".avi" && ext != ".mts" && ext != ".m2ts")
+                            newname = "IMG_";
+                        newname += dateTaken.ToString("yyyyMMdd") + "_" + dateTaken.ToString("HHmmss");
                     }
                     string newpath = Path.Combine(dir, dateTaken.ToString("yyyy-MM-dd"), newname + ext);
                     Directory.CreateDirectory(Path.Combine(dir, dateTaken.ToString("yyyy-MM-dd")));
