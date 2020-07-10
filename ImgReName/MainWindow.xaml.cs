@@ -121,7 +121,7 @@ namespace ImgReName
                         }
                     }
 
-                ChooseName:
+                    ChooseName:
 
                     string newname = "";
 
