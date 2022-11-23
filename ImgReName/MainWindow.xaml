@@ -18,7 +18,7 @@
             <TextBlock x:Name="debugLog" Drop="DropThings" AllowDrop="True">
                 <LineBreak/><Run Text=" Bilder/Videos auswählen oder auf das Fenster ziehen und ablegen."/>
                 <LineBreak/>
-                <LineBreak/><Run Text=" ImgReName verschiebt sie dann automatisch in nach dem Aufnhamedatum benannte"/>
+                <LineBreak/><Run Text=" ImgReName verschiebt sie dann automatisch in nach dem Aufnahmedatum benannte"/>
                 <LineBreak/><Run Text=" Ordner und bennent die Dateien nach ihrem Aufnahmezeitpunkt."/>
                 <LineBreak/><Run Text=" Weitere Informationen auf meiner Webseite:"/>
                 <Hyperlink Style="{DynamicResource MaterialDesignBody2Hyperlink}" RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://nalsai.de/imgrename/"><Run Text="https://nalsai.de/imgrename/"/></Hyperlink><LineBreak/></TextBlock>
